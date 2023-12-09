@@ -13,16 +13,16 @@ if (process.env.NODE_ENV !== 'production') {
 const PORT: number = parseInt(process.env.PORT!, 10) || 3100;
 const HOST: string = process.env.HOST! || 'localhost';
 
-const app = express();
+const server = express();
 
-app.use('/static', express.static(path.join(__dirname, 'images')));
+server.use('/static', express.static(path.join(__dirname, 'images')));
 
-app.use(cors());
+server.use(cors());
 
-app.use(helmet());
-app.use(express.json());
-app.use(cookieParser());
+server.use(helmet());
+server.use(express.json());
+server.use(cookieParser());
 
-app.listen(PORT, HOST, () => {
+server.listen(PORT, HOST, () => {
   console.info(`Server running at http://${HOST}:${PORT}/`);
 });
