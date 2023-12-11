@@ -3,8 +3,9 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import helmet from 'helmet';
-
 import path from 'path';
+
+import Console from 'src/utils/logger';
 
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config({ debug: true });
@@ -24,5 +25,5 @@ server.use(express.json());
 server.use(cookieParser());
 
 server.listen(PORT, HOST, () => {
-  console.info(`Server running at http://${HOST}:${PORT}/`);
+  Console.info(`Server running at http://${HOST}:${PORT}/`);
 });
