@@ -23,7 +23,10 @@ const HOST: string = process.env.HOST! || 'localhost';
 
 const server = express();
 
-server.use('/static', express.static(path.join(__dirname, 'images')));
+server.use(
+  '/static',
+  express.static(path.join(__dirname, '..', 'public/images'))
+);
 server.use(middleware.credentials);
 server.use(cors(corsOptions));
 

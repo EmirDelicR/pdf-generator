@@ -5,7 +5,7 @@ const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
-    const createdPath = path.join(__dirname, '..', '..', 'images');
+    const createdPath = path.join(__dirname, '..', '..', '..', 'public/images');
     cb(null, createdPath);
   },
   filename: (req, file, cb) => {
