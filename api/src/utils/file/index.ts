@@ -23,10 +23,9 @@ export const readFromFile = <T>(directory: string, fileName: string): T[] => {
 };
 
 export const writeErrorToFile = (text: string) => {
-  const currentDate = new Date().toLocaleString();
-  const dataToWrite = `#Error: <${currentDate}> ${text}`;
+  const dataToWrite = `#Error: <${new Date().toLocaleString()}> ${text}`;
   const errorStream = createFileStream(
-    path.join(__dirname, '..', 'logs'),
+    path.join(__dirname, '..', '..', '..', 'logs'),
     'error.log'
   );
 
