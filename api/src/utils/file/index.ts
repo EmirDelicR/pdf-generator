@@ -8,7 +8,7 @@ export const createFileStream = (
   fileName: string,
   flag = 'a'
 ) => {
-  const createdPath = path.join(__dirname, '..', '..', directory, fileName);
+  const createdPath = path.join(directory, fileName);
   const stream = fs.createWriteStream(createdPath, {
     flags: flag
   });
@@ -25,7 +25,10 @@ export const readFromFile = <T>(directory: string, fileName: string): T[] => {
 export const writeErrorToFile = (text: string) => {
   const currentDate = new Date().toLocaleString();
   const dataToWrite = `#Error: <${currentDate}> ${text}`;
-  const errorStream = createFileStream('logs', 'error.log');
+  const errorStream = createFileStream(
+    path.join(__dirname, '..', 'logs'),
+    'error.log'
+  );
 
   errorStream.on('error', (e) => {
     Console.error(e.message);

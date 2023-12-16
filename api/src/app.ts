@@ -5,12 +5,10 @@ import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
+
 import { corsOptions } from 'src/config/cors';
-
 import { middleware } from 'src/middleware';
-
 import registerRoutes from 'src/routes';
-
 import { createFileStream } from 'src/utils/file';
 import Console from 'src/utils/logger';
 
@@ -31,7 +29,9 @@ server.use(middleware.credentials);
 server.use(cors(corsOptions));
 
 server.use(
-  morgan('combined', { stream: createFileStream('logs', 'request.log') })
+  morgan('combined', {
+    stream: createFileStream(path.join(__dirname, '..', 'logs'), 'request.log')
+  })
 );
 server.use(helmet());
 server.use(express.json());
