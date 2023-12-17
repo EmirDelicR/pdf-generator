@@ -17,4 +17,16 @@ Create migration
 /pdf-generator/api$ npm run migration:create CreateUserTable
 ```
 
+Open MySQL shell and run :
+
+mysql -u root -p
+
+Password root123
+
+show databases;
+
 [typeorm](https://typeorm.io/)
+
+https://github.com/sadhakbj/Bookie-NodeJs-Typescript/blob/main/src/http/validators/IsUniqueValidator.ts
+
+https://sadhakbj.medium.com/lets-create-fully-dockerized-nodejs-backend-application-with-express-js-typescript-typeorm-and-1f7396623301

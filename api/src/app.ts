@@ -13,6 +13,7 @@ import { middleware } from 'src/middleware';
 import registerRoutes from 'src/routes';
 import { createFileStream } from 'src/utils/file';
 import Console from 'src/utils/logger';
+import { AppDataSource } from 'src/database/data-source';
 
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config({ debug: true });
@@ -42,6 +43,12 @@ server.use(cookieParser());
 registerRoutes(server);
 
 server.use(middleware.error);
+
+AppDataSource.initialize()
+  .then(async () => {
+    Console.info('Connection to database is establish.');
+  })
+  .catch((err) => Console.error(err));
 
 server.listen(PORT, HOST, () => {
   Console.info(`Server running at http://${HOST}:${PORT}/`);

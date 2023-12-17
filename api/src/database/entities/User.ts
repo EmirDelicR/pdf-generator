@@ -1,4 +1,4 @@
-import { hash } from 'bcryptjs';
+import { hash } from 'argon2';
 import {
   BeforeInsert,
   Column,
@@ -7,46 +7,86 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm';
-import { DBTable } from '../../constants/DBTable';
-import { Roles } from './../../constants/Role';
 
-@Entity(DBTable.USERS)
+import { DBTableNames, Roles } from 'src/database/utils/constants.ts';
+
+@Entity(DBTableNames.USERS)
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column()
-  name: string;
-
-  @Column()
-  password: string;
+  id!: string;
 
   @Column({ unique: true })
-  email: string;
+  email!: string;
+
+  @Column()
+  password!: string;
 
   @Column({ default: Roles.USER })
-  role: number;
+  role!: number;
+
+  @Column({ default: null })
+  age!: number;
+
+  @Column({ default: null })
+  avatar!: string;
+
+  @Column({ default: null })
+  firstName!: string;
+
+  @Column({ default: null })
+  lastName!: string;
+
+  @Column({ default: null })
+  userName!: string;
+
+  @Column()
+  token!: string;
+
+  @Column({ default: false })
+  loggedIn!: boolean;
+
+  @Column({ default: false })
+  profileUpdated!: boolean;
+
+  @Column({ default: false })
+  subscribed!: boolean;
 
   @BeforeInsert()
   async hashPassword() {
-    this.password = await hash(this.password, 12);
+    const { AUTH_PASSWORD_SALT } = process.env;
+    const salt = Buffer.from(`${AUTH_PASSWORD_SALT}`, 'utf-8');
+    this.password = await hash(password, { salt });
+  }
+  async createToken() {
+    const { AUTH_JWT_SECRET, AUTH_JWT_EXPIRES } = process.env;
+    this.token = jwt.sign({ email, password }, `${AUTH_JWT_SECRET}`, {
+      expiresIn: AUTH_JWT_EXPIRES
+    });
   }
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 
   toResponse(): Partial<User> {
     const responseUser = new User();
     responseUser.id = this.id;
-    responseUser.name = this.name;
     responseUser.email = this.email;
     responseUser.role = this.role;
     responseUser.createdAt = this.createdAt;
     responseUser.updatedAt = this.updatedAt;
-
+    responseUser.age = this.age;
+    responseUser.avatar = this.avatar;
+    responseUser.firstName = this.firstName;
+    responseUser.lastName = this.lastName;
+    responseUser.userName = this.userName;
+    responseUser.token = this.token;
+    responseUser.loggedIn = this.loggedIn;
+    responseUser.profileUpdated = this.profileUpdated;
+    responseUser.subscribed = this.subscribed;
+    // TODO @ed add subscription list here
     return responseUser;
   }
 }

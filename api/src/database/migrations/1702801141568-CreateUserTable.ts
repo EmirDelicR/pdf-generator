@@ -1,17 +1,49 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
+import { DBTableNames, Roles } from 'src/database/utils/constants';
+
 export class CreateUserTable1702801141568 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'users',
+        name: DBTableNames.USERS,
         columns: [
           {
             name: 'id',
-            type: 'int',
+            type: 'varchar',
             isPrimary: true,
-            isGenerated: true,
-            generationStrategy: 'increment'
+            isUnique: true,
+            generationStrategy: 'uuid'
+          },
+          {
+            name: 'email',
+            type: 'varchar',
+            length: '255',
+            isNullable: false,
+            isUnique: true
+          },
+          {
+            name: 'password',
+            type: 'varchar',
+            length: '255',
+            isNullable: false
+          },
+          {
+            name: 'role',
+            type: 'int',
+            default: Roles.USER
+          },
+          {
+            name: 'createdAt',
+            type: 'datetime',
+            default: 'now()',
+            isNullable: true
+          },
+          {
+            name: 'updatedAt',
+            type: 'datetime',
+            default: 'now()',
+            isNullable: true
           },
           {
             name: 'age',
@@ -23,18 +55,6 @@ export class CreateUserTable1702801141568 implements MigrationInterface {
             type: 'varchar',
             length: '255',
             isNullable: true
-          },
-          {
-            name: 'userId',
-            type: 'varchar',
-            length: '255',
-            isNullable: false
-          },
-          {
-            name: 'email',
-            type: 'varchar',
-            length: '255',
-            isNullable: false
           },
           {
             name: 'firstName',
@@ -53,12 +73,6 @@ export class CreateUserTable1702801141568 implements MigrationInterface {
             type: 'varchar',
             length: '255',
             isNullable: true
-          },
-          {
-            name: 'password',
-            type: 'varchar',
-            length: '255',
-            isNullable: false
           },
           {
             name: 'token',
@@ -86,16 +100,19 @@ export class CreateUserTable1702801141568 implements MigrationInterface {
       true
     );
 
-    await queryRunner.createForeignKey(
-      'books',
-      new TableForeignKey({
-        columnNames: ['author_id'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'authors',
-        onDelete: 'CASCADE'
-      })
-    );
+    // TODO @ed add subscription table here
+    // await queryRunner.createForeignKey(
+    //   'books',
+    //   new TableForeignKey({
+    //     columnNames: ['author_id'],
+    //     referencedColumnNames: ['id'],
+    //     referencedTableName: 'authors',
+    //     onDelete: 'CASCADE'
+    //   })
+    // );
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.dropTable(DBTable.USERS);
+  }
 }

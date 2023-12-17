@@ -6,14 +6,14 @@ services:
     container_name: 'db_container'
     restart: unless-stopped
     env_file: ./api/.env
-    network_mode: 'host'
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root123
       MYSQL_DATABASE: api_db
-      MYSQL_USER: Emir
-      MYSQL_PASSWORD: Emir123
+      MYSQL_USER: emir
+      MYSQL_PASSWORD: test123
     volumes:
       - db:/var/lib/mysql
+    network_mode: 'host'
 
   api:
     depends_on:
@@ -21,19 +21,18 @@ services:
     build: ./api
     container_name: 'api_container'
     restart: unless-stopped
-    network_mode: 'host'
     env_file: ./api/.env
     environment:
       DB_HOST: database
-      DB_USERNAME: Emir
-      DB_PASSWORD: Emir123
+      DB_USERNAME: emir
+      DB_PASSWORD: test123
       DB_DATABASE: api_db
     volumes:
       - logs:/app/logs
       - ./api:/app
       - /app/node_modules
-    stdin_open: true
-    tty: true
+    network_mode: 'host'
+
   # frontend:
   #   depends_on:
   #     - backend
