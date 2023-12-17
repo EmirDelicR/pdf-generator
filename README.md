@@ -25,6 +25,10 @@ Password root123
 
 show databases;
 
+USE db_name;
+
+SHOW TABLES;
+
 [typeorm](https://typeorm.io/)
 
 https://github.com/sadhakbj/Bookie-NodeJs-Typescript/blob/main/src/http/validators/IsUniqueValidator.ts

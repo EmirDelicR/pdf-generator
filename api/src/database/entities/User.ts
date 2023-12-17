@@ -1,4 +1,5 @@
 import { hash } from 'argon2';
+import jwt from 'jsonwebtoken';
 import {
   BeforeInsert,
   Column,
@@ -8,7 +9,14 @@ import {
   UpdateDateColumn
 } from 'typeorm';
 
-import { DBTableNames, Roles } from 'src/database/utils/constants.ts';
+enum DBTableNames {
+  USERS = 'users'
+}
+
+enum Roles {
+  ADMIN = 1,
+  USER = 2
+}
 
 @Entity(DBTableNames.USERS)
 export class User {
@@ -55,13 +63,17 @@ export class User {
   async hashPassword() {
     const { AUTH_PASSWORD_SALT } = process.env;
     const salt = Buffer.from(`${AUTH_PASSWORD_SALT}`, 'utf-8');
-    this.password = await hash(password, { salt });
+    this.password = await hash(this.password, { salt });
   }
   async createToken() {
     const { AUTH_JWT_SECRET, AUTH_JWT_EXPIRES } = process.env;
-    this.token = jwt.sign({ email, password }, `${AUTH_JWT_SECRET}`, {
-      expiresIn: AUTH_JWT_EXPIRES
-    });
+    this.token = jwt.sign(
+      { email: this.email, password: this.password },
+      `${AUTH_JWT_SECRET}`,
+      {
+        expiresIn: AUTH_JWT_EXPIRES
+      }
+    );
   }
 
   @CreateDateColumn()

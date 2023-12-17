@@ -1,4 +1,8 @@
 import { DataSource } from 'typeorm';
+import dotenv from 'dotenv';
+import { User } from './entities/User';
+
+dotenv.config();
 
 // export const AppDataSource = new DataSource({
 //   type: 'mysql',
@@ -16,14 +20,14 @@ import { DataSource } from 'typeorm';
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
-  host: 'localhost',
+  host: 'database',
   port: 3306,
   username: 'emir',
   password: 'test123',
   database: 'api_db',
   migrations: ['src/database/migrations/*.ts'],
   logging: true,
-  entities: ['src/database/entities/*.ts'],
+  entities: [User],
   synchronize: false,
   subscribers: []
 });

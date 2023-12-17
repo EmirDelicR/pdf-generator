@@ -1,6 +1,13 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-import { DBTableNames, Roles } from 'src/database/utils/constants';
+enum DBTableNames {
+  USERS = 'users'
+}
+
+enum Roles {
+  ADMIN = 1,
+  USER = 2
+}
 
 export class CreateUserTable1702801141568 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -113,6 +120,6 @@ export class CreateUserTable1702801141568 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable(DBTable.USERS);
+    await queryRunner.dropTable(DBTableNames.USERS);
   }
 }
