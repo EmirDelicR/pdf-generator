@@ -8,7 +8,11 @@
     "start-server": "tsc && node dist/app.js",
     "lint": "eslint '**/*.{ts,tsx}'",
     "test": "jest",
-    "test-watch": "jest --watch"
+    "test-watch": "jest --watch",
+    "typeorm": "typeorm-ts-node-commonjs -d src/database/data-source.ts",
+    "migration:show": "yarn typeorm migration:show",
+    "migration:create": "node scripts/migration-create.ts",
+    "migration:revert": "yarn typeorm migration:revert"
   },
   "repository": {
     "type": "git",
@@ -56,6 +60,9 @@
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.6.5",
+    "reflect-metadata": "^0.2.1",
+    "typeorm": "^0.3.17"
   }
 }
