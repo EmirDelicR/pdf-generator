@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-/* eslint-disable @typescript-eslint/no-var-requires */
-
 const yargs = require('yargs');
 const { execSync } = require('child_process');
 
