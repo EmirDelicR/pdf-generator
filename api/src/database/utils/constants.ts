@@ -1,5 +1,5 @@
 export enum DBTableNames {
-  USERS = 'users'
+  USER = 'user'
 }
 
 export enum Roles {

@@ -8,17 +8,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm';
+import { DBTableNames, Roles } from '../utils/constants';
 
-enum DBTableNames {
-  USERS = 'users'
-}
-
-enum Roles {
-  ADMIN = 1,
-  USER = 2
-}
-
-@Entity(DBTableNames.USERS)
+@Entity(DBTableNames.USER)
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
