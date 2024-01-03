@@ -3,7 +3,7 @@ import { CookieOptions, NextFunction, Request, Response } from 'express';
 
 import { IApiResponse, IApiResponseWithToken } from 'src/interfaces/api';
 import { IAuthUserBodyRequest, IUser } from 'src/interfaces/user';
-import { Roles } from 'src/utils/constants/db';
+import { INITIAL_USER_DATA } from 'src/utils/constants/user';
 
 import HttpError from 'src/utils/errors/httpError';
 import { writeErrorToFile } from 'src/utils/file';
@@ -20,23 +20,6 @@ export const COOKIE_OPTIONS: CookieOptions = {
   sameSite: 'none',
   secure: true,
   maxAge: 24 * 60 * 60 * 1000
-};
-
-const INITIAL_USER_DATA: IUser = {
-  age: '',
-  avatar: '',
-  email: '',
-  firstName: '',
-  id: '',
-  isLoggedIn: false,
-  isProfileUpdated: false,
-  isSubscribed: false,
-  lastName: '',
-  subscriptions: [],
-  password: '',
-  token: null,
-  userName: '',
-  role: Roles.USER
 };
 
 const loginUser = async (

@@ -1,7 +1,8 @@
 import { IUser } from 'src/interfaces/user';
 import { Roles } from './db';
+import { CookieOptions } from 'express';
 
-const INITIAL_USER_DATA: IUser = {
+export const INITIAL_USER_DATA: IUser = {
   age: '',
   avatar: '',
   email: '',
@@ -18,4 +19,9 @@ const INITIAL_USER_DATA: IUser = {
   role: Roles.USER
 };
 
-export { INITIAL_USER_DATA };
+export const COOKIE_OPTIONS: CookieOptions = {
+  httpOnly: true,
+  sameSite: 'none',
+  secure: true,
+  maxAge: 24 * 60 * 60 * 1000
+};
