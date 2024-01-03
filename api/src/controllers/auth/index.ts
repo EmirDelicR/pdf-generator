@@ -1,12 +1,13 @@
-import { hash, verify } from 'argon2';
 import crypto from 'crypto';
 import { CookieOptions, NextFunction, Request, Response } from 'express';
 
 import { IApiResponse, IApiResponseWithToken } from 'src/interfaces/api';
 import { IAuthUserBodyRequest, IUser } from 'src/interfaces/user';
+import { Roles } from 'src/utils/constants/db';
 
 import HttpError from 'src/utils/errors/httpError';
 import { writeErrorToFile } from 'src/utils/file';
+import { hashPassword, verifyPassword } from 'src/utils/password';
 import { signToken, verifyToken } from 'src/utils/token';
 import {
   validateEmail,
@@ -34,16 +35,14 @@ const INITIAL_USER_DATA: IUser = {
   subscriptions: [],
   password: '',
   token: null,
-  userName: ''
+  userName: '',
+  role: Roles.USER
 };
 
 const loginUser = async (
   email: string,
   password: string
 ): Promise<IApiResponseWithToken> => {
-  const { AUTH_PASSWORD_SALT } = process.env;
-  const salt = Buffer.from(`${AUTH_PASSWORD_SALT}`, 'utf-8');
-
   validateEmail(email);
   validateProperty(password, 'Password');
 
@@ -53,7 +52,7 @@ const loginUser = async (
     throw new HttpError({ message: 'No user found in DB!', status: 404 });
   }
 
-  const isPasswordMatch = await verify(user.password, password, { salt });
+  const isPasswordMatch = await verifyPassword(user.password, password);
   if (!isPasswordMatch) {
     throw new HttpError({ message: 'Invalid password!', status: 400 });
   }
@@ -121,8 +120,6 @@ const signUp = async (
   res: Response<IApiResponse>,
   next: NextFunction
 ) => {
-  const { AUTH_PASSWORD_SALT } = process.env;
-
   try {
     const { email, password } = req.body;
 
@@ -138,8 +135,7 @@ const signUp = async (
       });
     }
     // Encrypt user password
-    const salt = Buffer.from(`${AUTH_PASSWORD_SALT}`, 'utf-8');
-    const hashedPassword = await hash(password, { salt });
+    const hashedPassword = await hashPassword(password);
 
     const newUser: IUser = {
       ...INITIAL_USER_DATA,
