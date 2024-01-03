@@ -1,3 +1,5 @@
+import { Roles } from 'src/database/utils/constants';
+
 export interface IUpdateUserBodyRequest {
   age: string;
   avatar: string;
@@ -16,6 +18,7 @@ export interface IUser extends Omit<IUpdateUserBodyRequest, 'subscriptions'> {
   subscriptions: string[];
   token: string | null;
   userName: string;
+  role: Roles;
 }
 
 export interface IAuthUserBodyRequest {

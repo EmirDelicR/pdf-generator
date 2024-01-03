@@ -9,6 +9,7 @@ import {
   UpdateDateColumn
 } from 'typeorm';
 import { DBTableNames, Roles } from '../utils/constants';
+import { signToken } from 'src/utils/token';
 
 @Entity(DBTableNames.USER)
 export class User {
@@ -57,15 +58,9 @@ export class User {
     const salt = Buffer.from(`${AUTH_PASSWORD_SALT}`, 'utf-8');
     this.password = await hash(this.password, { salt });
   }
+  @BeforeInsert()
   async createToken() {
-    const { AUTH_JWT_SECRET, AUTH_JWT_EXPIRES } = process.env;
-    this.token = jwt.sign(
-      { email: this.email, password: this.password },
-      `${AUTH_JWT_SECRET}`,
-      {
-        expiresIn: AUTH_JWT_EXPIRES
-      }
-    );
+    this.token = signToken(this.password, this.email);
   }
 
   @CreateDateColumn()

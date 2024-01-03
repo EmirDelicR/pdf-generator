@@ -5,8 +5,6 @@ import { User } from '../entities/User';
 import { Roles } from '../utils/constants';
 
 import Console from 'src/utils/logger';
-import { signToken } from 'src/utils/token';
-
 export class SeedAdminUser1704278255526 implements MigrationInterface {
   public async up(_queryRunner: QueryRunner): Promise<void> {
     const repo = AppDataSource.getRepository(User);
@@ -17,7 +15,9 @@ export class SeedAdminUser1704278255526 implements MigrationInterface {
     userData.lastName = 'Doo';
     userData.role = Roles.ADMIN;
     userData.password = 'password123';
-    userData.token = signToken(userData.password, userData.email);
+    userData.loggedIn = false;
+    userData.profileUpdated = false;
+    userData.subscribed = false;
 
     const user = repo.create(userData);
     await repo.save(user);

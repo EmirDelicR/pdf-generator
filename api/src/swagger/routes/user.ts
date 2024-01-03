@@ -1,3 +1,4 @@
+import { Roles } from 'src/database/utils/constants';
 import {
   ISwaggerBodyRequest,
   ISwaggerParametersRequest,
@@ -24,7 +25,8 @@ export const EXAMPLE_USER_DATA: Omit<IUser, 'password'> = {
   lastName: 'Doe',
   subscriptions: ['news'],
   token: 'string | null',
-  userName: 'John Doe'
+  userName: 'John Doe',
+  role: Roles.USER
 };
 
 export const RESPONSE_USER_200: ISwaggerResponse = {
