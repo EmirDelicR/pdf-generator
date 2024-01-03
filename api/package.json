@@ -13,6 +13,7 @@
     "migration:show": "npm run typeorm migration:show",
     "migration:create": "scripts/migration-create.mjs",
     "migration:revert": "npm run typeorm migration:revert",
+    "migration:run": "npm run typeorm migration:run",
     "entity:create": "scripts/entity-create.mjs"
   },
   "repository": {

@@ -47,9 +47,8 @@ server.use(middleware.error);
 AppDataSource.initialize()
   .then(async () => {
     Console.info('Connection to database is establish.');
+    server.listen(PORT, HOST, () => {
+      Console.info(`Server running at http://${HOST}:${PORT}/`);
+    });
   })
   .catch((err) => Console.error(`Error with db connection: ${err}`));
-
-server.listen(PORT, HOST, () => {
-  Console.info(`Server running at http://${HOST}:${PORT}/`);
-});

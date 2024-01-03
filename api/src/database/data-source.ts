@@ -20,14 +20,15 @@ dotenv.config();
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
-  host: 'localhost',
+  host: 'database',
   port: 3306,
   username: 'emir',
   password: 'test123',
   database: 'api_db',
   migrations: ['src/database/migrations/*.ts'],
   entities: [User],
-  synchronize: true,
+  synchronize: false,
+  migrationsRun: true,
   subscribers: [],
-  logging: false
+  logging: true
 });
