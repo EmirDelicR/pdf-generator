@@ -1,4 +1,4 @@
-import { Roles } from 'src/database/utils/constants';
+import { Roles } from 'src/utils/constants/db';
 
 export interface IUpdateUserBodyRequest {
   age: string;
