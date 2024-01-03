@@ -1,4 +1,3 @@
-import { Roles } from 'src/database/utils/constants';
 import {
   ISwaggerBodyRequest,
   ISwaggerParametersRequest,
@@ -12,6 +11,7 @@ import {
   RESPONSE_200,
   SCHEMA
 } from 'src/swagger/utils/constants';
+import { Roles } from 'src/utils/constants/db';
 
 export const EXAMPLE_USER_DATA: Omit<IUser, 'password'> = {
   age: '12',

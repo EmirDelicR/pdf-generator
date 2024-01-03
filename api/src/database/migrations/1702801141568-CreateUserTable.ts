@@ -1,6 +1,5 @@
+import { DBTableNames, Roles } from 'src/utils/constants/db';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
-import { DBTableNames, Roles } from '../utils/constants';
-
 export class CreateUserTable1702801141568 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(

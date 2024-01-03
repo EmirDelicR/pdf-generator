@@ -1,5 +1,3 @@
-import { hash } from 'argon2';
-import jwt from 'jsonwebtoken';
 import {
   BeforeInsert,
   Column,
@@ -8,8 +6,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm';
-import { DBTableNames, Roles } from '../utils/constants';
+
 import { signToken } from 'src/utils/token';
+import { DBTableNames, Roles } from 'src/utils/constants/db';
+import { hashPassword } from 'src/utils/password';
 
 @Entity(DBTableNames.USER)
 export class User {
@@ -53,10 +53,8 @@ export class User {
   subscribed!: boolean;
 
   @BeforeInsert()
-  async hashPassword() {
-    const { AUTH_PASSWORD_SALT } = process.env;
-    const salt = Buffer.from(`${AUTH_PASSWORD_SALT}`, 'utf-8');
-    this.password = await hash(this.password, { salt });
+  async createPassword() {
+    this.password = await hashPassword(this.password);
   }
   @BeforeInsert()
   async createToken() {

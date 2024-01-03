@@ -2,9 +2,9 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 import { AppDataSource } from '../data-source';
 import { User } from '../entities/User';
-import { Roles } from '../utils/constants';
 
 import Console from 'src/utils/logger';
+import { Roles } from 'src/utils/constants/db';
 export class SeedAdminUser1704278255526 implements MigrationInterface {
   public async up(_queryRunner: QueryRunner): Promise<void> {
     const repo = AppDataSource.getRepository(User);

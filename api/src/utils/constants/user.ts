@@ -1,5 +1,5 @@
-import { Roles } from 'src/database/utils/constants';
 import { IUser } from 'src/interfaces/user';
+import { Roles } from './db';
 
 const INITIAL_USER_DATA: IUser = {
   age: '',
