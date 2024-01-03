@@ -1,17 +1,13 @@
 import { hash, verify } from 'argon2';
 import crypto from 'crypto';
 import { CookieOptions, NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 
 import { IApiResponse, IApiResponseWithToken } from 'src/interfaces/api';
-import {
-  IAuthUserBodyRequest,
-  IJwtTokenData,
-  IUser
-} from 'src/interfaces/user';
+import { IAuthUserBodyRequest, IUser } from 'src/interfaces/user';
 
 import HttpError from 'src/utils/errors/httpError';
 import { writeErrorToFile } from 'src/utils/file';
+import { signToken, verifyToken } from 'src/utils/token';
 import {
   validateEmail,
   validatePassword,
@@ -45,13 +41,7 @@ const loginUser = async (
   email: string,
   password: string
 ): Promise<IApiResponseWithToken> => {
-  const {
-    AUTH_PASSWORD_SALT,
-    AUTH_JWT_SECRET,
-    AUTH_JWT_EXPIRES,
-    AUTH_JWT_REFRESH_EXPIRES,
-    AUTH_JWT_REFRESH_SECRET
-  } = process.env;
+  const { AUTH_PASSWORD_SALT } = process.env;
   const salt = Buffer.from(`${AUTH_PASSWORD_SALT}`, 'utf-8');
 
   validateEmail(email);
@@ -68,19 +58,9 @@ const loginUser = async (
     throw new HttpError({ message: 'Invalid password!', status: 400 });
   }
 
-  const token = jwt.sign({ email, password }, `${AUTH_JWT_SECRET}`, {
-    expiresIn: AUTH_JWT_EXPIRES
-  });
+  const refreshToken = signToken(password, email, true);
 
-  const refreshToken = jwt.sign(
-    { email, password },
-    `${AUTH_JWT_REFRESH_SECRET}`,
-    {
-      expiresIn: AUTH_JWT_REFRESH_EXPIRES
-    }
-  );
-
-  user.token = token;
+  user.token = signToken(password, email);
   user.isLoggedIn = true;
   patchUserInDb(user);
   const { password: pass, ...rest } = user;
@@ -115,14 +95,9 @@ const autoSignIn = async (
   res: Response<IApiResponse>,
   next: NextFunction
 ) => {
-  const { AUTH_JWT_SECRET } = process.env;
-
   try {
     const { token } = req.body;
-    const { email, password, exp } = jwt.verify(
-      token,
-      `${AUTH_JWT_SECRET}`
-    ) as IJwtTokenData;
+    const { email, password, exp } = verifyToken(token);
 
     if (Date.now() >= exp * 1000) {
       throw new HttpError({
@@ -146,13 +121,7 @@ const signUp = async (
   res: Response<IApiResponse>,
   next: NextFunction
 ) => {
-  const {
-    AUTH_PASSWORD_SALT,
-    AUTH_JWT_SECRET,
-    AUTH_JWT_EXPIRES,
-    AUTH_JWT_REFRESH_SECRET,
-    AUTH_JWT_REFRESH_EXPIRES
-  } = process.env;
+  const { AUTH_PASSWORD_SALT } = process.env;
 
   try {
     const { email, password } = req.body;
@@ -179,22 +148,11 @@ const signUp = async (
       password: hashedPassword,
       id: crypto.randomUUID()
     };
-    // Create token
-    const token = jwt.sign({ email, password }, `${AUTH_JWT_SECRET}`, {
-      expiresIn: AUTH_JWT_EXPIRES
-    });
     // save user token
-    newUser.token = token;
+    newUser.token = signToken(password, email);
     writeToDbFile([...getAllUsersFromDb(), newUser], 'user.json');
     const { password: pass, ...rest } = newUser;
-
-    const refreshToken = jwt.sign(
-      { email, password },
-      `${AUTH_JWT_REFRESH_SECRET}`,
-      {
-        expiresIn: AUTH_JWT_REFRESH_EXPIRES
-      }
-    );
+    const refreshToken = signToken(password, email, true);
 
     res.cookie('jwt', refreshToken, COOKIE_OPTIONS);
     res.status(201).json({
@@ -209,13 +167,6 @@ const signUp = async (
 };
 
 const updateToken = async (req: Request, res: Response, next: NextFunction) => {
-  const {
-    AUTH_JWT_SECRET,
-    AUTH_JWT_EXPIRES,
-    AUTH_JWT_REFRESH_SECRET,
-    AUTH_JWT_REFRESH_EXPIRES
-  } = process.env;
-
   try {
     const { cookies } = req;
 
@@ -226,11 +177,7 @@ const updateToken = async (req: Request, res: Response, next: NextFunction) => {
       });
     }
 
-    const { email, password, exp } = jwt.verify(
-      cookies.jwt,
-      `${AUTH_JWT_REFRESH_SECRET}`
-    ) as IJwtTokenData;
-
+    const { email, password, exp } = verifyToken(cookies.jwt, true);
     const user = getUserByEmailFromDb(email);
 
     if (!user) {
@@ -251,22 +198,12 @@ const updateToken = async (req: Request, res: Response, next: NextFunction) => {
       });
     }
 
-    const token = jwt.sign({ email, password }, `${AUTH_JWT_SECRET}`, {
-      expiresIn: AUTH_JWT_EXPIRES
-    });
-
-    user.token = token;
+    user.token = signToken(password, email);
     user.isLoggedIn = true;
     patchUserInDb(user);
     const { password: pass, ...rest } = user;
 
-    const refreshToken = jwt.sign(
-      { email, password },
-      `${AUTH_JWT_REFRESH_SECRET}`,
-      {
-        expiresIn: AUTH_JWT_REFRESH_EXPIRES
-      }
-    );
+    const refreshToken = signToken(password, email, true);
 
     res.cookie('jwt', refreshToken, COOKIE_OPTIONS);
     res.status(201).json({
