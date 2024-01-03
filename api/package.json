@@ -9,10 +9,11 @@
     "lint": "eslint '**/*.{ts,tsx}'",
     "test": "jest",
     "test-watch": "jest --watch",
-    "typeorm": "typeorm-ts-node-commonjs -d src/database/data-source.ts",
-    "migration:show": "typeorm migration:show",
-    "migration:create": "node scripts/migration-create.ts",
-    "migration:revert": "typeorm migration:revert"
+    "typeorm": "typeorm-ts-node-commonjs --dataSource=src/database/data-source.ts",
+    "migration:show": "npm run typeorm migration:show",
+    "migration:create": "scripts/migration-create.mjs",
+    "migration:revert": "npm run typeorm migration:revert",
+    "entity:create": "scripts/entity-create.mjs"
   },
   "repository": {
     "type": "git",

@@ -66,3 +66,13 @@ You can kill that service with command:
 ```console
 service mysql stop
 ```
+
+sudo chmod -R 777 api/scripts
+
+Create entity:
+
+npm run entity:create --entity=Photo
+
+Create migration
+
+npm run migration:create --migration=CreateUserTable
