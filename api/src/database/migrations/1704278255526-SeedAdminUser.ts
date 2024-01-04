@@ -21,7 +21,7 @@ export class SeedAdminUser1704278255526 implements MigrationInterface {
 
     const user = repo.create(userData);
     await repo.save(user);
-    Console.info('Admin user save to DB.');
+    Console.info('Admin user saved to DB.');
   }
 
   public async down(_queryRunner: QueryRunner): Promise<void> {

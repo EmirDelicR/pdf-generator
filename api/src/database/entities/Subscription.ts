@@ -1,13 +1,7 @@
-import {
-  BeforeInsert,
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { DBTableNames } from 'src/utils/constants/db';
+import { User } from './User';
 
 @Entity(DBTableNames.SUBSCRIPTION)
 export class Subscription {
@@ -16,6 +10,9 @@ export class Subscription {
 
   @Column({ unique: true })
   name!: string;
+
+  @ManyToOne(() => User, (user) => user.subscriptions)
+  user!: User;
 
   toResponse(): Subscription {
     const subscription = new Subscription();

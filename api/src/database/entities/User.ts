@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm';
@@ -52,6 +53,9 @@ export class User {
 
   @Column({ default: false })
   subscribed!: boolean;
+
+  @OneToMany(() => Subscription, (subscription) => subscription.user)
+  subscriptions!: Subscription[];
 
   @BeforeInsert()
   async createPassword() {

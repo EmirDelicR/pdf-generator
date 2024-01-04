@@ -1,5 +1,5 @@
-import { DBTableNames, Roles } from 'src/utils/constants/db';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { DBTableNames, Roles } from 'src/utils/constants/db';
 export class CreateUserTable1702801141568 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
@@ -97,17 +97,6 @@ export class CreateUserTable1702801141568 implements MigrationInterface {
       }),
       true
     );
-
-    // TODO @ed add subscription table here
-    // await queryRunner.createForeignKey(
-    //   'books',
-    //   new TableForeignKey({
-    //     columnNames: ['author_id'],
-    //     referencedColumnNames: ['id'],
-    //     referencedTableName: 'authors',
-    //     onDelete: 'CASCADE'
-    //   })
-    // );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
