@@ -21,13 +21,13 @@ export class SeedSubscription1704360153151 implements MigrationInterface {
     const code = repo.create(subscriptionCode);
     const general = repo.create(subscriptionGeneral);
 
-    await repo.save(news);
+    //await repo.save(news);
     Console.info('News subscription saved to DB.');
 
-    await repo.save(code);
+    //await repo.save(code);
     Console.info('Code subscription saved to DB.');
 
-    await repo.save(general);
+    //await repo.save(general);
     Console.info('General subscription saved to DB.');
   }
 

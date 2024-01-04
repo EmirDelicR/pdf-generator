@@ -3,7 +3,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm';
@@ -12,6 +14,7 @@ import { signToken } from 'src/utils/token';
 import { DBTableNames, Roles } from 'src/utils/constants/db';
 import { hashPassword } from 'src/utils/password';
 import { Subscription } from './Subscription';
+import { Role } from './Role';
 
 @Entity(DBTableNames.USER)
 export class User {
@@ -23,9 +26,6 @@ export class User {
 
   @Column()
   password!: string;
-
-  @Column({ default: Roles.USER })
-  role!: number;
 
   @Column({ default: null })
   age!: number;
@@ -53,6 +53,10 @@ export class User {
 
   @Column({ default: false })
   subscribed!: boolean;
+
+  @OneToOne(() => Role)
+  @JoinColumn()
+  role!: Role;
 
   @OneToMany(() => Subscription, (subscription) => subscription.user)
   subscriptions!: Subscription[];

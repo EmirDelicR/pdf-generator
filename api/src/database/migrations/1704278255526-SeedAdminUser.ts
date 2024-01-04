@@ -5,22 +5,28 @@ import { User } from '../entities/User';
 
 import Console from 'src/utils/logger';
 import { Roles } from 'src/utils/constants/db';
+import { Role } from '../entities/Role';
+
+const EMAIL = 'admin@test.com';
 export class SeedAdminUser1704278255526 implements MigrationInterface {
   public async up(_queryRunner: QueryRunner): Promise<void> {
-    const repo = AppDataSource.getRepository(User);
+    const userRepo = AppDataSource.getRepository(User);
+    const roleRepo = AppDataSource.getRepository(Role);
+
+    const role = (await roleRepo.findOneBy({ type: Roles.ADMIN })) as Role;
     const userData = new User();
 
-    userData.email = 'admin@emir.local';
+    userData.email = EMAIL;
     userData.firstName = 'John';
     userData.lastName = 'Doo';
-    userData.role = Roles.ADMIN;
+    userData.role = role;
     userData.password = 'password123';
     userData.loggedIn = false;
     userData.profileUpdated = false;
     userData.subscribed = false;
 
-    const user = repo.create(userData);
-    await repo.save(user);
+    const user = userRepo.create(userData);
+    await userRepo.save(user);
     Console.info('Admin user saved to DB.');
   }
 
@@ -28,7 +34,7 @@ export class SeedAdminUser1704278255526 implements MigrationInterface {
     const repo = AppDataSource.getRepository(User);
 
     const user = await repo.findOneBy({
-      email: 'admin@emir.local'
+      email: EMAIL
     });
 
     if (user) {
