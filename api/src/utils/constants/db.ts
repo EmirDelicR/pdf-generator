@@ -1,6 +1,7 @@
 export enum DBTableNames {
   USER = 'user',
-  SUBSCRIPTION = 'subscription'
+  SUBSCRIPTION = 'subscription',
+  ROLE = 'role'
 }
 
 export enum Roles {

@@ -2,6 +2,7 @@ import { DataSource } from 'typeorm';
 import dotenv from 'dotenv';
 import { User } from './entities/User';
 import { Subscription } from './entities/Subscription';
+import { Role } from './entities/Role';
 
 dotenv.config();
 
@@ -27,7 +28,7 @@ export const AppDataSource = new DataSource({
   password: 'test123',
   database: 'api_db',
   migrations: ['src/database/migrations/*.ts'],
-  entities: [User, Subscription],
+  entities: [User, Subscription, Role],
   synchronize: false,
   migrationsRun: true,
   subscribers: [],
