@@ -6,7 +6,7 @@ import { Subscription } from '../entities/Subscription';
 import Console from 'src/utils/logger';
 
 export class SeedSubscription1704360153151 implements MigrationInterface {
-  public async up(queryRunner: QueryRunner): Promise<void> {
+  public async up(_queryRunner: QueryRunner): Promise<void> {
     const repo = AppDataSource.getRepository(Subscription);
     const subscriptionNews = new Subscription();
     subscriptionNews.name = 'news';
@@ -23,11 +23,13 @@ export class SeedSubscription1704360153151 implements MigrationInterface {
 
     await repo.save(news);
     Console.info('News subscription saved to DB.');
+
     await repo.save(code);
     Console.info('Code subscription saved to DB.');
+
     await repo.save(general);
     Console.info('General subscription saved to DB.');
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(_queryRunner: QueryRunner): Promise<void> {}
 }

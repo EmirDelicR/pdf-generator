@@ -11,13 +11,14 @@ export class Subscription {
   @Column({ unique: true })
   name!: string;
 
-  @ManyToOne(() => User, (user) => user.subscriptions)
+  @ManyToOne(() => User, (user) => user.subscriptions, { nullable: true })
   user!: User;
 
   toResponse(): Subscription {
     const subscription = new Subscription();
     subscription.id = this.id;
     subscription.name = this.name;
+    subscription.user = this.user;
 
     return subscription;
   }
