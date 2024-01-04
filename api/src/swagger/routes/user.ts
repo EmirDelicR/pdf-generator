@@ -14,19 +14,21 @@ import {
 import { Roles } from 'src/utils/constants/db';
 
 export const EXAMPLE_USER_DATA: Omit<IUser, 'password'> = {
-  age: '12',
+  age: 12,
   avatar: 'base64:image',
   email: 'test@test.com',
   firstName: 'John',
   id: 'some-uuid',
-  isLoggedIn: true,
-  isProfileUpdated: false,
-  isSubscribed: false,
+  loggedIn: true,
+  profileUpdated: false,
+  subscribed: false,
   lastName: 'Doe',
   subscriptions: ['news'],
   token: 'string | null',
   userName: 'John Doe',
-  role: Roles.USER
+  role: Roles.USER,
+  createdAt: new Date(),
+  updatedAt: new Date()
 };
 
 export const RESPONSE_USER_200: ISwaggerResponse = {
@@ -83,7 +85,7 @@ const BODY_REQUEST: ISwaggerBodyRequest = {
             type: 'string',
             description: 'Last name of the user.'
           },
-          isSubscribed: {
+          subscribed: {
             type: 'boolean',
             description: 'Is user subscribed flag.'
           },
@@ -98,7 +100,7 @@ const BODY_REQUEST: ISwaggerBodyRequest = {
           avatar: 'path/to/image',
           firstName: 'John',
           lastName: 'Doe',
-          isSubscribed: 'true',
+          subscribed: 'true',
           subscriptions: '["news"]'
         }
       }

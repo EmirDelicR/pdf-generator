@@ -1,24 +1,25 @@
 import { Roles } from 'src/utils/constants/db';
 
 export interface IUpdateUserBodyRequest {
-  age: string;
+  age: number | null;
   avatar: string;
   firstName: string;
-  isSubscribed: boolean;
   lastName: string;
-  subscriptions: string;
+  subscribed: boolean;
+  subscriptions: string[];
 }
 
-export interface IUser extends Omit<IUpdateUserBodyRequest, 'subscriptions'> {
+export interface IUser extends IUpdateUserBodyRequest {
   email: string;
   id: string;
-  isLoggedIn: boolean;
-  isProfileUpdated: boolean;
+  loggedIn: boolean;
+  profileUpdated: boolean;
   password: string;
-  subscriptions: string[];
   token: string | null;
   userName: string;
   role: Roles;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface IAuthUserBodyRequest {

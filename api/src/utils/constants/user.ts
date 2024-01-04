@@ -3,20 +3,22 @@ import { Roles } from './db';
 import { CookieOptions } from 'express';
 
 export const INITIAL_USER_DATA: IUser = {
-  age: '',
+  age: null,
   avatar: '',
   email: '',
   firstName: '',
   id: '',
-  isLoggedIn: false,
-  isProfileUpdated: false,
-  isSubscribed: false,
   lastName: '',
-  subscriptions: [],
+  loggedIn: false,
   password: '',
+  profileUpdated: false,
+  role: Roles.USER,
+  subscribed: false,
+  subscriptions: [],
   token: null,
   userName: '',
-  role: Roles.USER
+  createdAt: new Date(),
+  updatedAt: new Date()
 };
 
 export const COOKIE_OPTIONS: CookieOptions = {
