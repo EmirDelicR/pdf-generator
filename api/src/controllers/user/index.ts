@@ -55,7 +55,6 @@ const updateUser = async (
 
     validateProperty(userData.firstName, 'First name');
     validateProperty(userData.lastName, 'Last name');
-    validateProperty(userData.age, 'Age');
 
     const PORT: number = parseInt(process.env.PORT!, 10) || 3000;
     const HOST: string = process.env.HOST! || 'localhost';
@@ -64,7 +63,7 @@ const updateUser = async (
       ...user,
       ...userData,
       avatar: `http://${HOST}:${PORT}/static/${id}-${userData?.avatar}`,
-      subscriptions: JSON.parse(userData?.subscriptions),
+      subscriptions: userData?.subscriptions,
       isProfileUpdated: true,
       userName: `${userData.firstName} ${userData.lastName}`.trim()
     };

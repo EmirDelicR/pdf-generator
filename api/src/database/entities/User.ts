@@ -10,6 +10,7 @@ import {
 import { signToken } from 'src/utils/token';
 import { DBTableNames, Roles } from 'src/utils/constants/db';
 import { hashPassword } from 'src/utils/password';
+import { Subscription } from './Subscription';
 
 @Entity(DBTableNames.USER)
 export class User {
@@ -68,22 +69,22 @@ export class User {
   updatedAt!: Date;
 
   toResponse(): Partial<User> {
-    const responseUser = new User();
-    responseUser.id = this.id;
-    responseUser.email = this.email;
-    responseUser.role = this.role;
-    responseUser.createdAt = this.createdAt;
-    responseUser.updatedAt = this.updatedAt;
-    responseUser.age = this.age;
-    responseUser.avatar = this.avatar;
-    responseUser.firstName = this.firstName;
-    responseUser.lastName = this.lastName;
-    responseUser.userName = this.userName;
-    responseUser.token = this.token;
-    responseUser.loggedIn = this.loggedIn;
-    responseUser.profileUpdated = this.profileUpdated;
-    responseUser.subscribed = this.subscribed;
+    const user = new User();
+    user.id = this.id;
+    user.email = this.email;
+    user.role = this.role;
+    user.createdAt = this.createdAt;
+    user.updatedAt = this.updatedAt;
+    user.age = this.age;
+    user.avatar = this.avatar;
+    user.firstName = this.firstName;
+    user.lastName = this.lastName;
+    user.userName = this.userName;
+    user.token = this.token;
+    user.loggedIn = this.loggedIn;
+    user.profileUpdated = this.profileUpdated;
+    user.subscribed = this.subscribed;
     // TODO @ed add subscription list here
-    return responseUser;
+    return user;
   }
 }
